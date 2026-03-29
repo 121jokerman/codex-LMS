@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info:
+  title: UPI Offline API Gateway
+  version: 1.0.0
+paths:
+  /submit-transaction:
+    post:
+      summary: Submit transaction for sync
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, vpa, amount, channel, timestamp, encryptedPayload, signature]
+              properties:
+                id: { type: string }
+                vpa: { type: string }
+                amount: { type: number }
+                channel: { type: string, enum: [NFC, BLE, SMS, USSD, SOUND] }
+                timestamp: { type: string }
+                encryptedPayload: { type: string }
+                signature: { type: string }
+      responses:
+        '200':
+          description: Sync successful
+  /sync-status/{id}:
+    get:
+      summary: Query sync status by transaction id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Found }
+        '404': { description: Not Found }
+  /fraud-check:
+    post:
+      summary: Fraud score proxy endpoint
+      responses:
+        '200': { description: Score generated }
