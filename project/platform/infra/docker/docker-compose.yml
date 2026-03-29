@@ -1,0 +1,43 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: upi_offline
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - '6379:6379'
+
+  fraud-api:
+    build:
+      context: ../../../services/fraud-service
+      dockerfile: Dockerfile
+    ports:
+      - '8001:8001'
+
+  api:
+    build:
+      context: ../../../services/api-gateway
+      dockerfile: Dockerfile
+    environment:
+      PORT: 8000
+      POSTGRES_URL: postgres://postgres:postgres@postgres:5432/upi_offline
+      REDIS_URL: redis://redis:6379
+      FRAUD_API_URL: http://fraud-api:8001
+    ports:
+      - '8000:8000'
+    depends_on:
+      - postgres
+      - redis
+      - fraud-api
+
+volumes:
+  pg_data:
