@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend/node
+        working-directory: project/services/api-gateway
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend/python
+        working-directory: project/services/fraud-service
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

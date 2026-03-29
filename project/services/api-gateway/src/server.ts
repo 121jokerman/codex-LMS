@@ -21,7 +21,7 @@ async function bootstrap() {
   app.use(transactionRouter);
   app.use(fraudRouter);
 
-  const openapi = YAML.load(path.resolve(__dirname, '../../../infra/docs/openapi.yaml'));
+  const openapi = YAML.load(path.resolve(__dirname, '../../../platform/infra/docs/openapi.yaml'));
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 
   app.listen(env.port, () => {
